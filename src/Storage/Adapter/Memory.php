@@ -32,4 +32,13 @@ class Memory implements Adapter
 
         return $this->data[$identifier];
     }
+
+    /**
+     * @param string $identifier
+     * @return void
+     */
+    public function delete(string $identifier): void
+    {
+        unset($this->data[$identifier]);
+    }
 }

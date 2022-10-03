@@ -17,4 +17,10 @@ interface Adapter
      * @return string
      */
     public function read(string $identifier): string;
+
+    /**
+     * @param string $identifier
+     * @return void
+     */
+    public function delete(string $identifier): void;
 }

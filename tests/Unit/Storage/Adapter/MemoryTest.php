@@ -44,4 +44,20 @@ class MemoryTest extends TestCase
         $this->expectException(ResourceNotFoundException::class);
         $this->adapter->read('unknown-identifier');
     }
+
+    /**
+     * @covers \Sol\Storage\Adapter\Memory::write
+     * @covers \Sol\Storage\Adapter\Memory::read
+     * @covers \Sol\Storage\Adapter\Memory::delete
+     * @return void
+     * @throws ResourceNotFoundException
+     */
+    public function testWriteDelete(): void
+    {
+        $identifier = 'test-1234';
+        $this->adapter->write($identifier, 'Cats riding on a skateboard');
+        $this->adapter->delete($identifier);
+        $this->expectException(ResourceNotFoundException::class);
+        $this->adapter->read($identifier);
+    }
 }
