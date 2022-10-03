@@ -23,6 +23,7 @@
         "php": ">=8.0",
         "ext-json": "*",
         "ext-pdo": "*",
+        "doctrine/dbal": "^3.4",
         "monolog/monolog": "^2.8",
         "php-di/php-di": "^6.4",
         "slim/psr7": "^1.5",

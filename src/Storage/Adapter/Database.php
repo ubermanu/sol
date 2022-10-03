@@ -2,32 +2,34 @@
 
 namespace Sol\Storage\Adapter;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 use Sol\Storage\Adapter;
 use Sol\Storage\Exception\ResourceNotFoundException;
 
 class Database implements Adapter
 {
     /**
-     * @var \PDO
+     * @var Connection
      */
-    protected \PDO $pdo;
+    protected Connection $connection;
 
     /**
      * @param string $dsn
+     * @throws Exception
      */
     public function __construct(string $dsn)
     {
-        $this->pdo = new \PDO($dsn);
-        $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+        $this->connection = \Doctrine\DBAL\DriverManager::getConnection(['url' => $dsn]);
     }
 
     /**
      * @inheritDoc
+     * @throws Exception
      */
     public function write(string $identifier, string $content, array $options = []): void
     {
-        $statement = $this->pdo->prepare('INSERT INTO storage (identifier, content) VALUES (:identifier, :content)');
-        $statement->execute([
+        $this->connection->insert('storage', [
             'identifier' => $identifier,
             'content' => $content,
         ]);
@@ -36,32 +38,26 @@ class Database implements Adapter
     /**
      * @inheritDoc
      * @throws ResourceNotFoundException
+     * @throws Exception
      */
     public function read(string $identifier): string
     {
-        $statement = $this->pdo->prepare('SELECT content FROM storage WHERE identifier = :identifier');
-        $statement->execute([
-            'identifier' => $identifier,
-        ]);
+        $result = $this->connection->fetchOne('SELECT content FROM storage WHERE identifier = ?', [$identifier]);
 
-        $result = $statement->fetch(\PDO::FETCH_ASSOC);
-
-        if ($result === false) {
+        if (empty($result)) {
             throw new ResourceNotFoundException($identifier);
         }
 
-        return $result['content'];
+        return $result;
     }
 
     /**
      * @param string $identifier
      * @return void
+     * @throws Exception
      */
     public function delete(string $identifier): void
     {
-        $statement = $this->pdo->prepare('DELETE FROM storage WHERE identifier = :identifier');
-        $statement->execute([
-            'identifier' => $identifier,
-        ]);
+        $this->connection->delete('storage', ['identifier' => $identifier]);
     }
 }
