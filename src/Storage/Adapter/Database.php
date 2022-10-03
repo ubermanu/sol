@@ -4,6 +4,7 @@ namespace Sol\Storage\Adapter;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
+use Doctrine\DBAL\ParameterType;
 use Sol\Storage\Adapter;
 use Sol\Storage\Exception\ResourceNotFoundException;
 
@@ -29,10 +30,17 @@ class Database implements Adapter
      */
     public function write(string $identifier, string $content, array $options = []): void
     {
-        $this->connection->insert('storage', [
-            'identifier' => $identifier,
-            'content' => $content,
-        ]);
+        $this->connection->executeStatement(
+            'INSERT INTO storage (identifier, content) VALUES (:identifier, :content) ON DUPLICATE KEY UPDATE content = :content',
+            [
+                'identifier' => $identifier,
+                'content' => $content,
+            ],
+            [
+                'identifier' => ParameterType::STRING,
+                'content' => ParameterType::STRING,
+            ]
+        );
     }
 
     /**
