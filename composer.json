@@ -1,0 +1,26 @@
+{
+    "name": "ubermanu/sol",
+    "description": "Small SOLID specification implementation",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Emmanuel Vodor",
+            "email": "manu@paca.happy-dev.fr"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Sol\\": "src/"
+        }
+    },
+    "require": {
+        "ext-json": "*",
+        "php": ">=8.0",
+        "slim/psr7": "^1.5",
+        "slim/slim": "^4.10"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
