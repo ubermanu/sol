@@ -1,0 +1,7 @@
+#!/bin/bash
+
+## Description: Run psalm
+## Usage: psalm
+## Example: ddev psalm
+
+php vendor/bin/psalm $@

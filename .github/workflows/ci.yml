@@ -15,3 +15,4 @@ jobs:
       - uses: jonaseberle/github-action-setup-ddev@v1
       - run: ddev composer install
       - run: ddev phpunit
+      - run: ddev psalm
