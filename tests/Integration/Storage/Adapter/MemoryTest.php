@@ -1,6 +1,6 @@
 <?php
 
-namespace Sol\Tests\Unit\Storage\Adapter;
+namespace Sol\Tests\Integration\Storage\Adapter;
 
 use PHPUnit\Framework\TestCase;
 use Sol\Storage\Adapter\Memory;
