@@ -63,4 +63,24 @@ class Database implements Adapter
     {
         $this->connection->delete('storage', ['identifier' => $identifier]);
     }
+
+    /**
+     * @return void
+     * @throws Exception
+     * @internal
+     */
+    public function createTableIfNotExists(): void
+    {
+        $this->connection->executeStatement('CREATE TABLE IF NOT EXISTS storage (identifier VARCHAR(255) PRIMARY KEY, content TEXT)');
+    }
+
+    /**
+     * @return void
+     * @throws Exception
+     * @internal
+     */
+    public function dropTableIfExists(): void
+    {
+        $this->connection->executeStatement('DROP TABLE IF EXISTS storage');
+    }
 }
