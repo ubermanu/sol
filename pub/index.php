@@ -15,6 +15,7 @@ $dotenv->loadEnv(__DIR__ . '/../.env');
 // Create storage adapter according to the env variable
 $adapter = match ($_ENV['SOL_STORAGE']) {
     'filesystem' => new \Sol\Storage\Adapter\Filesystem($_ENV['SOL_STORAGE_FILESYSTEM_ROOT_DIR']),
+    'database' => new \Sol\Storage\Adapter\Database($_ENV['SOL_STORAGE_DATABASE_DSN']),
     'memory' => new \Sol\Storage\Adapter\Memory(),
     default => throw new \RuntimeException('Invalid storage adapter'),
 };
