@@ -3,11 +3,24 @@
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
+use Symfony\Component\Dotenv\Dotenv;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-// TODO: Create a new storage according to config (tbd).
-$storage = new \Sol\Storage\Storage(new \Sol\Storage\Adapter\Filesystem('../var/storage'));
+// Load environment variables
+$dotenv = new Dotenv();
+$dotenv->load(__DIR__ . '/../.env.dist');
+$dotenv->loadEnv(__DIR__ . '/../.env');
+
+// Create storage adapter according to the env variable
+$adapter = match ($_ENV['SOL_STORAGE']) {
+    'filesystem' => new \Sol\Storage\Adapter\Filesystem($_ENV['SOL_STORAGE_FILESYSTEM_ROOT_DIR']),
+    'memory' => new \Sol\Storage\Adapter\Memory(),
+    default => throw new \RuntimeException('Invalid storage adapter'),
+};
+
+// Create storage service
+$storage = new \Sol\Storage\Storage($adapter);
 $randomId = new \Sol\Identifier\Random();
 
 $app = AppFactory::create();

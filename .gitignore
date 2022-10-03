@@ -2,3 +2,5 @@
 vendor
 var
 .phpunit*
+.env*
+!.env.dist

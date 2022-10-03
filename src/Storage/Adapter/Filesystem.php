@@ -17,7 +17,7 @@ class Filesystem implements Adapter
      */
     public function __construct(?string $rootDir = null)
     {
-        $this->rootDir = $rootDir ?? getcwd();
+        $this->rootDir = dirname(getcwd()) . DIRECTORY_SEPARATOR . rtrim($rootDir ?? 'var/data', DIRECTORY_SEPARATOR);
     }
 
     /**
