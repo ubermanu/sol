@@ -19,6 +19,10 @@ class Storage
      */
     public function write(string $identifier, string $content): void
     {
+        if (empty($identifier)) {
+            throw new \InvalidArgumentException('Identifier cannot be empty');
+        }
+
         $this->adapter->write($identifier, $content);
     }
 
@@ -28,7 +32,24 @@ class Storage
      */
     public function read(string $identifier): string
     {
+        if (empty($identifier)) {
+            throw new \InvalidArgumentException('Identifier cannot be empty');
+        }
+
         return $this->adapter->read($identifier);
+    }
+
+    /**
+     * @param string $identifier
+     * @return void
+     */
+    public function delete(string $identifier): void
+    {
+        if (empty($identifier)) {
+            throw new \InvalidArgumentException('Identifier cannot be empty');
+        }
+
+        $this->adapter->delete($identifier);
     }
 
     /**

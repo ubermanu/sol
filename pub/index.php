@@ -3,8 +3,15 @@
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
+use Sol\Identifier\Random;
+use Sol\Storage\Adapter\Memory;
+use Sol\Storage\Storage;
 
 require __DIR__ . '/../vendor/autoload.php';
+
+// TODO: Create a new storage according to config (tbd).
+$storage = new Storage(new Memory());
+$randomId = new Random();
 
 $app = AppFactory::create();
 
@@ -16,10 +23,8 @@ $app->get('/', function (Request $request, Response $response) {
  * Create a resource with the given URL.
  * The MIME type of the resource is determined by the "Content-Type" header.
  */
-$app->put('/{resource}', function (Request $request, Response $response, array $args) {
-    $filename = $args['resource'];
-    // TODO: Create the resource with the given filename.
-    $response->getBody()->write("resource filename: $filename");
+$app->put('/{resource}', function (Request $request, Response $response, array $args) use ($storage) {
+    $storage->write($args['resource'], $request->getBody()->getContents());
     return $response;
 });
 
@@ -28,26 +33,27 @@ $app->put('/{resource}', function (Request $request, Response $response, array $
  * The MIME type of the resource is determined by the "Content-Type" header.
  * The generated name of the resource is contained in the response "Location" header.
  */
-$app->post('/', function (Request $request, Response $response) {
-    // TODO: Create the resource with a generated filename.
+$app->post('/', function (Request $request, Response $response) use ($storage, $randomId) {
+    $identifier = $randomId->generate();
+    $storage->write($identifier, $request->getBody()->getContents());
+    $response->withAddedHeader('Location', $request->getUri() . $identifier);
     return $response;
 });
 
 /**
  * Get a resource with the given URL.
  */
-$app->get('/{resource}', function (Request $request, Response $response, array $args) {
-    $filename = $args['resource'];
-    // TODO: get the resource from the filesystem
-    $response->getBody()->write("resource filename: $filename");
+$app->get('/{resource}', function (Request $request, Response $response, array $args) use ($storage) {
+    $response->getBody()->write($storage->read($args['resource']));
     return $response;
 });
 
 /**
  * Delete a resource with the given URL.
  */
-$app->delete('/{resource}', function (Request $request, Response $response, array $args) {
-    $filename = $args['resource'];
+$app->delete('/{resource}', function (Request $request, Response $response, array $args) use ($storage) {
+    $storage->delete($args['resource']);
+    return $response;
 });
 
 /**
