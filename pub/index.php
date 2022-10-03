@@ -3,15 +3,12 @@
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
-use Sol\Identifier\Random;
-use Sol\Storage\Adapter\Memory;
-use Sol\Storage\Storage;
 
 require __DIR__ . '/../vendor/autoload.php';
 
 // TODO: Create a new storage according to config (tbd).
-$storage = new Storage(new Memory());
-$randomId = new Random();
+$storage = new \Sol\Storage\Storage(new \Sol\Storage\Adapter\Filesystem('../var/storage'));
+$randomId = new \Sol\Identifier\Random();
 
 $app = AppFactory::create();
 
