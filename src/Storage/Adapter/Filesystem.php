@@ -17,7 +17,15 @@ class Filesystem implements Adapter
      */
     public function __construct(?string $rootDir = null)
     {
-        $this->rootDir = dirname(getcwd()) . DIRECTORY_SEPARATOR . rtrim($rootDir ?? 'var/data', DIRECTORY_SEPARATOR);
+        if (empty($rootDir)) {
+            $rootDir = sys_get_temp_dir() . '/sol/data';
+        }
+
+        if (str_starts_with($rootDir, DIRECTORY_SEPARATOR)) {
+            $this->rootDir = $rootDir;
+        } else {
+            $this->rootDir = dirname(getcwd()) . DIRECTORY_SEPARATOR . rtrim($rootDir, DIRECTORY_SEPARATOR);
+        }
     }
 
     /**
