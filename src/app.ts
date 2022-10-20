@@ -32,10 +32,16 @@ app.put('*', async (c) => {
  * @route POST /
  */
 app.post('/', async (c) => {
-    const filename = randomFilename()
+    let filename = randomFilename()
     const ext = mime.extension(c.req.headers.get('content-type'))
-    await filesystem.writeFile(filename + (ext ? `.${ext}` : ''), await c.req.text())
-    c.res.headers.append('Location', filename)
+
+    if (ext) {
+        filename += '.' + ext
+    }
+
+    await filesystem.writeFile(filename, await c.req.text())
+    c.header('Location', filename)
+
     return c.text('')
 })
 
