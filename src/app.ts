@@ -56,6 +56,11 @@ app.post('/', async (c) => {
         filename += '.' + ext
     }
 
+    // TODO: This should never happen, iterate until we find a free filename.
+    if (await storage.exists(filename)) {
+        return c.text('Document already exists', 409)
+    }
+
     await storage.write(filename, await c.req.text())
     c.header('Location', filename)
 
