@@ -1,9 +1,22 @@
 {
   "name": "@ubermanu/sol",
-  "module": "src/app.js",
+  "description": "A small implementation of a SOLID server",
+  "private": true,
+  "version": "0.1.0",
   "type": "module",
+  "module": "src/app.js",
+  "license": "MIT",
+  "author": {
+    "name": "Emmanuel Vodor",
+    "email": "manu@paca.happy-dev.fr"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ubermanu/sol.git"
+  },
   "scripts": {
-    "start": "bun run server.ts"
+    "start": "bun run server.ts",
+    "dev": "bun run nodemon"
   },
   "dependencies": {
     "fs-extra": "^10.1.0",
