@@ -18,7 +18,7 @@ app.get('*', async (c) => {
  */
 app.post('*', async (c) => {
     const url = new URL(c.req.url)
-    await filesystem.writeFile(url.pathname, c.req.body.toString())
+    await filesystem.writeFile(url.pathname, await c.req.text())
     return c.text('')
 })
 
