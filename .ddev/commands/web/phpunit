@@ -1,7 +1,0 @@
-#!/bin/bash
-
-## Description: Run phpunit tests
-## Usage: phpunit
-## Example: ddev phpunit
-
-php vendor/bin/phpunit $@
