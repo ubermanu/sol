@@ -1,6 +1,6 @@
 import { Hono } from 'hono'
 import mime from 'mime-types'
-import * as filesystem from './filesystem'
+import storage from './storage/filesystem'
 import { randomFilename } from './filename'
 
 const app = new Hono()
@@ -18,12 +18,12 @@ app.get('/', (c) => c.text('Your SOL server is running!'))
 app.get('*', async (c) => {
     const url = new URL(c.req.url)
 
-    if (!await filesystem.checkFile(url.pathname)) {
+    if (!await storage.exists(url.pathname)) {
         return c.notFound()
     }
 
     c.header('Content-Type', mime.contentType(url.pathname) || 'text/plain')
-    return c.body(await filesystem.readFile(url.pathname))
+    return c.body(await storage.read(url.pathname))
 })
 
 /**
@@ -32,7 +32,12 @@ app.get('*', async (c) => {
  */
 app.put('*', async (c) => {
     const url = new URL(c.req.url)
-    await filesystem.writeFile(url.pathname, await c.req.text())
+
+    if (await storage.exists(url.pathname)) {
+        return c.text('Document already exists', 409)
+    }
+
+    await storage.write(url.pathname, await c.req.text())
     return c.text('')
 })
 
@@ -51,7 +56,7 @@ app.post('/', async (c) => {
         filename += '.' + ext
     }
 
-    await filesystem.writeFile(filename, await c.req.text())
+    await storage.write(filename, await c.req.text())
     c.header('Location', filename)
 
     return c.text('')
@@ -64,11 +69,11 @@ app.post('/', async (c) => {
 app.delete('*', async (c) => {
     const url = new URL(c.req.url)
 
-    if (!await filesystem.checkFile(url.pathname)) {
+    if (!await storage.exists(url.pathname)) {
         return c.notFound()
     }
 
-    await filesystem.deleteFile(url.pathname)
+    await storage.delete(url.pathname)
     return c.text('')
 })
 
@@ -84,7 +89,7 @@ app.options('*', async (c) => {
     if (url.pathname === '/') {
         methods.push('POST')
     } else {
-        if (await filesystem.checkFile(url.pathname)) {
+        if (await storage.exists(url.pathname)) {
             methods.concat(['GET', 'DELETE'])
         } else {
             methods.push('PUT')

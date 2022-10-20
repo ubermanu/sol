@@ -1,5 +1,6 @@
 import * as path from 'path'
 import fs from 'fs-extra'
+import { StorageInterface } from '../storage'
 
 const dataDir = process.env.SOL_DATA_DIR || 'var/data'
 
@@ -10,15 +11,11 @@ const dataDir = process.env.SOL_DATA_DIR || 'var/data'
  *
  * @param file
  */
-export const readFile = async (file: string) => {
+const readFile = async (file: string) => {
     const filePath = path.join(dataDir, file)
 
     if (filePath.endsWith('/')) {
         throw new Error('Cannot read a directory')
-    }
-
-    if (!await checkFile(filePath)) {
-        throw new Error(`Document ${filePath} not found`)
     }
 
     return await fs.readFile(filePath, 'utf-8')
@@ -32,16 +29,12 @@ export const readFile = async (file: string) => {
  * @param file
  * @param data
  */
-export const writeFile = async (file: string, data: string) => {
+const writeFile = async (file: string, data: string) => {
     if (file.endsWith('/')) {
         throw new Error('Cannot write a directory')
     }
 
     const filePath = path.join(dataDir, file)
-
-    if (await fs.pathExists(filePath)) {
-        throw new Error('Document already exists')
-    }
 
     await fs.mkdir(path.dirname(filePath), { recursive: true })
     await fs.writeFile(filePath, data)
@@ -54,7 +47,7 @@ export const writeFile = async (file: string, data: string) => {
  *
  * @param file
  */
-export const deleteFile = async (file: string) => {
+const deleteFile = async (file: string) => {
     if (file.endsWith('/')) {
         throw new Error('Cannot delete a directory')
     }
@@ -66,6 +59,13 @@ export const deleteFile = async (file: string) => {
  * Returns TRUE if the file exists.
  * @param file
  */
-export const checkFile = async (file: string) => {
+const fileExists = async (file: string) => {
     return await fs.pathExists(path.join(dataDir, file))
 }
+
+export default {
+    read: readFile,
+    write: writeFile,
+    delete: deleteFile,
+    exists: fileExists
+} as StorageInterface
