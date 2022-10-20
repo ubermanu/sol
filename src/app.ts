@@ -17,6 +17,11 @@ app.get('/', (c) => c.text('Your SOL server is running!'))
  */
 app.get('*', async (c) => {
     const url = new URL(c.req.url)
+
+    if (!await filesystem.checkFile(url.pathname)) {
+        return c.notFound()
+    }
+
     c.header('Content-Type', mime.contentType(url.pathname) || 'text/plain')
     return c.body(await filesystem.readFile(url.pathname))
 })
@@ -58,6 +63,11 @@ app.post('/', async (c) => {
  */
 app.delete('*', async (c) => {
     const url = new URL(c.req.url)
+
+    if (!await filesystem.checkFile(url.pathname)) {
+        return c.notFound()
+    }
+
     await filesystem.deleteFile(url.pathname)
     return c.text('')
 })
