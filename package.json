@@ -1,14 +1,16 @@
 {
   "name": "@ubermanu/sol",
-  "module": "src/server.js",
+  "module": "src/app.js",
   "type": "module",
   "scripts": {
-    "start": "bun run src/server.ts"
+    "start": "bun run server.ts"
   },
   "dependencies": {
+    "fs-extra": "^10.1.0",
     "hono": "^2.3.1"
   },
   "devDependencies": {
-    "bun-types": "latest"
+    "bun-types": "latest",
+    "nodemon": "^2.0.20"
   }
 }
