@@ -7,7 +7,6 @@ const dataDir = process.env.SOL_DATA_DIR || 'var/data'
 /**
  * Returns the content of a stored file.
  * If the file is a directory, throw an error.
- * If the file does not exist, throw an error.
  *
  * @param file
  */
@@ -23,7 +22,6 @@ const readFile = async (file: string) => {
 
 /**
  * Write the file into the file system.
- * If the file already exists, throw an error.
  * If it ends with a slash, throw an error.
  *
  * @param file
@@ -43,7 +41,6 @@ const writeFile = async (file: string, data: string) => {
 /**
  * Delete the file from the file system.
  * If it ends with a slash, throw an error.
- * If the file does not exist, throw an error.
  *
  * @param file
  */
