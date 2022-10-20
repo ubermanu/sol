@@ -1,6 +1,4 @@
-# sol
-
-[![CI](https://github.com/ubermanu/sol/actions/workflows/ci.yml/badge.svg)](https://github.com/ubermanu/sol/actions/workflows/ci.yml)
+# SOL
 
 This project is a simple implementation of a SOLID server.
 
@@ -8,9 +6,9 @@ It has the basic endpoints to create, fetch, update and delete resources.
 
 ## Usage
 
-Run the server with your favorite web server (or the built-in one):
+Run the server with [Bun](https://bun.sh):
 
-    php -S localhost:8000 -t pub
+    bun run start
 
 ### PUT
 
