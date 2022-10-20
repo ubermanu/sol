@@ -1,6 +1,5 @@
 .idea
-vendor
 var
-.phpunit*
 .env*
 !.env.dist
+node_modules

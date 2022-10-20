@@ -1,0 +1,14 @@
+{
+  "name": "@ubermanu/sol",
+  "module": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "bun run src/server.ts"
+  },
+  "dependencies": {
+    "hono": "^2.3.1"
+  },
+  "devDependencies": {
+    "bun-types": "latest"
+  }
+}
