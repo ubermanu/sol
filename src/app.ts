@@ -1,4 +1,5 @@
 import { Hono } from 'hono'
+import mime from 'mime-types'
 import * as filesystem from './filesystem'
 import { randomFilename } from './filename'
 
@@ -26,11 +27,14 @@ app.put('*', async (c) => {
 /**
  * Write a randomly generated file into the file system.
  * Returns the filename into the response Location header.
+ * The extension is determined by the Content-Type header.
+ *
  * @route POST /
  */
 app.post('/', async (c) => {
     const filename = randomFilename()
-    await filesystem.writeFile(filename, await c.req.text())
+    const ext = mime.extension(c.req.headers.get('content-type'))
+    await filesystem.writeFile(filename + (ext ? `.${ext}` : ''), await c.req.text())
     c.res.headers.append('Location', filename)
     return c.text('')
 })
