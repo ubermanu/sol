@@ -6,6 +6,12 @@ import { randomFilename } from './filename'
 const app = new Hono()
 
 /**
+ * Placeholder to indicate the health of the server.
+ * @route GET /
+ */
+app.get('/', (c) => c.text('Your SOL server is running!'))
+
+/**
  * Dump the requested file to the response.
  * @route GET *
  */
