@@ -11,7 +11,8 @@ const app = new Hono()
  */
 app.get('*', async (c) => {
     const url = new URL(c.req.url)
-    return c.text(await filesystem.readFile(url.pathname))
+    c.header('Content-Type', mime.contentType(url.pathname) || 'text/plain')
+    return c.body(await filesystem.readFile(url.pathname))
 })
 
 /**
