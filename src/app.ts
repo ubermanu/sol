@@ -56,4 +56,30 @@ app.delete('*', async (c) => {
     return c.text('')
 })
 
+/**
+ * Returns the options for the requested file.
+ * @route OPTIONS *
+ */
+app.options('*', async (c) => {
+    const url = new URL(c.req.url)
+    const methods = ['OPTIONS']
+
+    // We can post only to the root.
+    if (url.pathname === '/') {
+        methods.push('POST')
+    } else {
+        if (await filesystem.checkFile(url.pathname)) {
+            methods.concat(['GET', 'DELETE'])
+        } else {
+            methods.push('PUT')
+        }
+    }
+
+    c.header('Access-Control-Allow-Origin', '*')
+    c.header('Access-Control-Allow-Methods', methods.join(', '))
+    c.header('Access-Control-Allow-Headers', 'Content-Type')
+
+    return c.text('')
+})
+
 export default app

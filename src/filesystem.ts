@@ -49,3 +49,11 @@ export const deleteFile = async (file: string) => {
 
     await fs.unlink(path.join(dataDir, file))
 }
+
+/**
+ * Returns TRUE if the file exists.
+ * @param file
+ */
+export const checkFile = async (file: string) => {
+    return await fs.pathExists(path.join(dataDir, file))
+}
