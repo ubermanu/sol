@@ -26,9 +26,10 @@ app.post('*', async (c) => {
  * Delete the file from the file system.
  * @route DELETE *
  */
-app.delete('*', (c) => {
+app.delete('*', async (c) => {
     const url = new URL(c.req.url)
-    return c.text(url.pathname)
+    await filesystem.deleteFile(url.pathname)
+    return c.text('')
 })
 
 export default app
