@@ -3,13 +3,25 @@ import fs from 'fs-extra'
 
 const dataDir = process.env.SOL_DATA_DIR || 'var/data'
 
-
 /**
  * Returns the content of a stored file.
+ * If the file is a directory, throw an error.
+ * If the file does not exist, throw an error.
+ *
  * @param file
  */
 export const readFile = async (file: string) => {
-    return await fs.readFile(path.join(dataDir, file), 'utf-8')
+    const filePath = path.join(dataDir, file)
+
+    if (filePath.endsWith('/')) {
+        throw new Error('Cannot read a directory')
+    }
+
+    if (!await checkFile(filePath)) {
+        throw new Error(`Document ${filePath} not found`)
+    }
+
+    return await fs.readFile(filePath, 'utf-8')
 }
 
 /**
