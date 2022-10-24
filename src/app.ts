@@ -1,9 +1,10 @@
 import { Hono } from 'hono'
 import mime from 'mime-types'
-import storage from './storage/filesystem'
+import { createStorage } from './storage'
 import { randomFilename } from './filename'
 
 const app = new Hono()
+const storage = createStorage(process.env.SOL_DATA_STORAGE || 'none')
 
 /**
  * Placeholder to indicate the health of the server.
