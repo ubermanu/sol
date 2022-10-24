@@ -1,4 +1,4 @@
-import { StorageInterface } from '../storage'
+import type { StorageInterface } from '../storage'
 
 const data = {}
 

@@ -1,6 +1,6 @@
 import * as path from 'path'
 import fs from 'fs-extra'
-import { StorageInterface } from '../storage'
+import type { StorageInterface } from '../storage'
 
 const dataDir = process.env.SOL_DATA_DIR || 'var/data'
 
