@@ -38,7 +38,10 @@ app.head('*', async (c) => {
         return c.notFound()
     }
 
+    const content = await storage.read(url.pathname)
+    c.header('Content-Length', content.length.toString())
     c.header('Content-Type', mime.contentType(url.pathname) || 'text/plain')
+
     return c.status(200)
 })
 
