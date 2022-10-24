@@ -18,7 +18,7 @@ app.get('/', (c) => c.text('Your SOL server is running!'))
 app.get('*', async (c) => {
     const url = new URL(c.req.url)
 
-    if (!await storage.exists(url.pathname)) {
+    if (!(await storage.exists(url.pathname))) {
         return c.notFound()
     }
 
@@ -74,7 +74,7 @@ app.post('/', async (c) => {
 app.delete('*', async (c) => {
     const url = new URL(c.req.url)
 
-    if (!await storage.exists(url.pathname)) {
+    if (!(await storage.exists(url.pathname))) {
         return c.notFound()
     }
 
