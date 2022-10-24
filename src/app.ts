@@ -28,6 +28,21 @@ app.get('*', async (c) => {
 })
 
 /**
+ * Handle the HEAD request.
+ * @route HEAD *
+ */
+app.head('*', async (c) => {
+    const url = new URL(c.req.url)
+
+    if (!(await storage.exists(url.pathname))) {
+        return c.notFound()
+    }
+
+    c.header('Content-Type', mime.contentType(url.pathname) || 'text/plain')
+    return c.status(200)
+})
+
+/**
  * Write the file into the file system.
  * @route PUT *
  */
